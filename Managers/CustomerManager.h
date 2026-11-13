@@ -1,41 +1,71 @@
+
+
 #pragma once
 
-#include "../Objects/Customer.h"
+
+#include "Customer.h"
 #include <string>
+
 
 using namespace std;
 
+
 class CustomerManager {
 private:
-    Customer** arr;
+    Customer* arr;
     int size;
     int capacity;
 
+
 public:
+    // Constructor
     CustomerManager();
+
+
+    // Copy constructor
     CustomerManager(const CustomerManager& other);
+
+
+    // Toan tu gan
     CustomerManager& operator=(const CustomerManager& other);
+
+
+    // Destructor
     ~CustomerManager();
 
+
+    // Getter
     int getSize() const;
     int getCapacity() const;
-    Customer** getArr() const;
+
+
+    Customer* getArr();
+    const Customer* getArr() const;
+
 
     // Nap chong toan tu
-    CustomerManager& operator+=(Customer* customer);        // Them khach hang
-    CustomerManager& operator-=(const string& id);          // Xoa khach hang theo ID
-    Customer* operator[](int index);                       // Truy xuat theo index
-    const Customer* operator[](int index) const;
+    CustomerManager& operator+=(const Customer& customer);
+    CustomerManager& operator-=(const string& id);
 
-    // Quan ly khach hang
-    void addCustomer(Customer* customer);
-    bool editCustomer(const string& id, Customer* updatedCustomer);
+
+    Customer& operator[](int index);
+    const Customer& operator[](int index) const;
+
+
+    // Ham tim kiem
+    Customer* findCustomerById(const string& id);
+    const Customer* findCustomerById(const string& id) const;
+
+
+    // Ham quan ly khach hang
+    void addCustomer(const Customer& customer);
+    bool editCustomer(const string& id, const Customer& updatedCustomer);
     bool deleteCustomer(const string& id);
 
-    // Tim kiem va hien thi
-    Customer* findCustomerById(const string& id) const;
-    void displayAll() const;
 
-    // Tinh tong du kien thu phi
-    long long calculateTotalExpectedRevenue() const;
+    // Ham hien thi
+    void displayAll() const;
 };
+
+
+

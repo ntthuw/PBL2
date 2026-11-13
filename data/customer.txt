@@ -1,0 +1,4 @@
+KH001|Household|Nguyen Van An|0905123456|Hai Chau Da Nang|Area1
+KH002|Household|Tran Thi Binh|0912345678|Thanh Khe Da Nang|Area2
+KH003|Business|Van phong ABC|0987654321|Lien Chieu Da Nang|Type1
+KH004|Business|Cho Dong Da|0934567890|Hai Chau Da Nang|Type2

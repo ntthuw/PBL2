@@ -1,5 +1,5 @@
+
 #pragma once
-#include <iostream>
 #include <string>
 using namespace std;
 
@@ -7,13 +7,20 @@ class Invoice {
 private:
     string invoice_id;
     string customer_id;
-    long long amount;
-    string issue_date;
-    string payment_status; // "Da thanh toan" / "Chua thanh toan"
+    string invoice_date;
+    string invoice_status;
+    long long total_amount;
+    string billing_month;
 
 public:
     Invoice();
-    Invoice(string invoice_id, string customer_id, long long amount, string issue_date, string payment_status);
+
+    Invoice(const string& invoice_id,
+            const string& customer_id,
+            const string& invoice_date,
+            long long total_amount,
+            const string& billing_month,
+            const string& invoice_status = "Unpaid");
 
     string getInvoice_id() const;
     void setInvoice_id(const string& invoice_id);
@@ -21,14 +28,18 @@ public:
     string getCustomer_id() const;
     void setCustomer_id(const string& customer_id);
 
-    long long getAmount() const;
-    void setAmount(long long amount);
+    string getInvoice_date() const;
+    void setInvoice_date(const string& invoice_date);
 
-    string getIssue_date() const;
-    void setIssue_date(const string& issue_date);
+    string getInvoice_status() const;
+    void setInvoice_status(const string& invoice_status);
 
-    string getPayment_status() const;
-    void setPayment_status(const string& payment_status);
+    long long getTotal_amount() const;
+    void setTotal_amount(long long total_amount);
+
+    string getBilling_month() const;
+    void setBilling_month(const string& billing_month);
 
     void Show() const;
 };
+  

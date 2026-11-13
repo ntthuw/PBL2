@@ -1,0 +1,6 @@
+vehicle_id|vehicle_status|capacity|vehicle_km
+VH001|Maintenance|45000|120000
+VH002|InUse|7000|18320
+VH004|InUse|5400|30000
+
+

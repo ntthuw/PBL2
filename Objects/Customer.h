@@ -1,6 +1,10 @@
 #pragma once
+
+
 #include <iostream>
-#include <string.h>
+#include <string>
+
+
 using namespace std;
 
 
@@ -11,42 +15,49 @@ private:
     string customer_name;
     string customer_phone;
     string customer_address;
+    string service_area;
+
+
 public:
+    // Constructor
     Customer();
+
+
     Customer(
-    string customer_id,
-    string customer_type,
-    string customer_name,
-    string customer_phone,
-    string customer_address
-
-
+        string customer_id,
+        string customer_type,
+        string customer_name,
+        string customer_phone,
+        string customer_address,
+        string service_area
     );
 
 
-    string getCustomer_id()const;
-    void setCustomer_id (const string& customer_id);
+    // Getter
+    string getCustomer_id() const;
+    string getCustomer_type() const;
+    string getCustomer_name() const;
+    string getCustomer_phone() const;
+    string getCustomer_address() const;
+    string getService_area() const;
 
 
-    string getCustomer_type()const;
-    void setCustomer_type (const string& customer_type);
-
-
-    string getCustomer_name()const;
+    // Setter
+    void setCustomer_id(const string& customer_id);
+    void setCustomer_type(const string& customer_type);
     void setCustomer_name(const string& customer_name);
-
-
-    string getCustomer_phone()const;
     void setCustomer_phone(const string& customer_phone);
-
-
-    string getCustomer_address()const;
     void setCustomer_address(const string& customer_address);
+    void setService_area(const string& service_area);
 
 
-    virtual long long calculate_fee() const = 0;
+    // Ham kiem tra du lieu
+    void validate() const;
+
+
+    // Ham show
     void Show() const;
-
-
 };
+
+
 

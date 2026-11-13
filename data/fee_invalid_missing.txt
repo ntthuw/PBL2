@@ -1,0 +1,4 @@
+Household|Area1|25000
+Household|Area2|30000
+Business|Type1|165000
+Business|Type2|265000
