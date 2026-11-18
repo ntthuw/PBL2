@@ -1,4 +1,3 @@
-
 #include "Janitor.h"
 #include <stdexcept>
 
