@@ -1,6 +1,5 @@
-vehicle_id|vehicle_status|capacity|vehicle_km
-VH001|Maintenance|45000|120000
-VH002|InUse|7000|18320
-VH004|InUse|5400|30000
-
-
+VehicleID|Status|Capacity|Kilometer
+XE001|Available|5.0|12500
+XE002|Available|8.0|18300
+XE003|Maintenance|5.0|22000
+XE004|Available|8.0|9600
