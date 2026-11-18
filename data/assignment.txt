@@ -1,0 +1,13 @@
+AssignmentID|Date|ShiftID|VehicleID|DriverID|Janitor1ID|Janitor2ID
+# Cac lich duoi day la du lieu tuong lai de Demo hien tai co the nap va confirm.
+# TODAY+N duoc tinh tu ngay chay demo; dung token nay de du lieu khong bi cu theo thoi gian.
+# CV001-CV002: hai doi lam hai ca khac nhau trong cung ngay.
+CV001|TODAY+1|CA01|XE001|NV001|NV002|NV003
+CV002|TODAY+1|CA02|XE002|NV004|NV005|NV006
+# CV003: doi thu ba, ca toi, ngay tiep theo.
+CV003|TODAY+2|CA03|XE004|NV009|NV010|NV011
+# CV004-CV005: tai su dung nhan su/xe vao ngay khac; khong trung lich.
+CV004|TODAY+3|CA01|XE001|NV001|NV002|NV003
+CV005|TODAY+3|CA02|XE002|NV004|NV005|NV006
+# CV006: doi thu ba duoc xep lai vao ngay khac.
+CV006|TODAY+4|CA03|XE004|NV009|NV010|NV011
