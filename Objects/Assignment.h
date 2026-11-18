@@ -1,38 +1,67 @@
+
 #pragma once
+
 #include <iostream>
 #include <string>
+#include <vector>
+
 using namespace std;
 
-class Assignment {
+class Assignment
+{
 private:
     string assignment_id;
-    string employee_id;
+    vector<string> employee_ids;
     string vehicle_id;
-    string route_id;
-    string date;
-    string shift;
+    string shift_id;
+    string assignment_date;
+    string assignment_status;
 
 public:
+    // Constructor
     Assignment();
-    Assignment(string assignment_id, string employee_id, string vehicle_id, string route_id, string date, string shift);
 
+    Assignment(
+        const string& assignment_id,
+        const vector<string>& employee_ids,
+        const string& vehicle_id,
+        const string& shift_id,
+        const string& assignment_date,
+        const string& assignment_status
+    );
+
+    // Getter / Setter
     string getAssignment_id() const;
     void setAssignment_id(const string& assignment_id);
 
-    string getEmployee_id() const;
-    void setEmployee_id(const string& employee_id);
+    // Quan ly danh sach nhan vien
+    const vector<string>& getEmployee_ids() const;
 
+    int getEmployeeCount() const;
+    string getEmployee_id(int index) const;
+
+    bool hasEmployee(const string& employee_id) const;
+    bool addEmployee(const string& employee_id);
+    bool removeEmployee(const string& employee_id);
+
+    // Quan ly phuong tien
     string getVehicle_id() const;
     void setVehicle_id(const string& vehicle_id);
 
-    string getRoute_id() const;
-    void setRoute_id(const string& route_id);
+    // Quan ly ca lam
+    string getShift_id() const;
+    void setShift_id(const string& shift_id);
 
-    string getDate() const;
-    void setDate(const string& date);
+    // Quan ly ngay lam
+    string getAssignment_date() const;
+    void setAssignment_date(const string& assignment_date);
 
-    string getShift() const;
-    void setShift(const string& shift);
+    // Quan ly trang thai
+    string getAssignment_status() const;
+    void setAssignment_status(const string& assignment_status);
 
+    static bool isValidStatus(const string& status);
+
+    // Hien thi
     void Show() const;
 };
