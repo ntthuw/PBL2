@@ -1,20 +1,24 @@
 #pragma once
 
-#include "../Objects/Employee.h"
-#include "../Objects/Manager.h"
-#include "../Objects/Driver.h"
-#include "../Objects/Janitor.h"
+#include "Employee.h"
+#include "Manager.h"
+#include "Driver.h"
+#include "Janitor.h"
 #include <string>
 
 using namespace std;
 
-class EmployeeManager {
+class EmployeeManager
+{
 private:
-    Employee** arr; 
+    Employee** arr;
     int size;
     int capacity;
 
+    void resize();
+
 public:
+    // Constructor / Destructor
     EmployeeManager();
     EmployeeManager(const EmployeeManager& other);
     EmployeeManager& operator=(const EmployeeManager& other);
@@ -23,24 +27,35 @@ public:
     // Getter
     int getSize() const;
     int getCapacity() const;
-    Employee** getArr() const;
 
-    // Nap chong toan tu
-    EmployeeManager& operator+=(Employee* emp);            // Them nhan vien
-    EmployeeManager& operator-=(const string& id);          // Xoa nhan vien theo ID
-    Employee* operator[](int index);                       // Truy xuat theo index
+    // Truy cap nhan vien
+    Employee* operator[](int index);
     const Employee* operator[](int index) const;
 
+    // Nap chong toan tu
+    EmployeeManager& operator+=(const Employee& employee);
+    EmployeeManager& operator-=(const string& id);
+
     // Quan ly du lieu nhan vien
-    void addEmployee(Employee* employee);
-    bool editEmployee(const string& id, Employee* updatedEmployee);
+    void addEmployee(const Employee& employee);
+
+    bool editEmployee(
+        const string& id,
+        const Employee& updatedEmployee
+    );
+
     bool deleteEmployee(const string& id);
 
     // Tim kiem va hien thi
-    Employee* findEmployeeById(const string& id) const;
+    Employee* findEmployeeById(const string& id);
+    const Employee* findEmployeeById(const string& id) const;
+
     void displayAll() const;
 
-    // Tinh toan & Thong ke
+    // Tinh toan va thong ke
     long long calculateTotalSalaryFund() const;
+
     void displayByPosition(const string& position) const;
+
+    bool isEmployeeIdExist(const string& id) const;
 };
