@@ -2,6 +2,23 @@
 #include "Employee.h"
 #include <iomanip>
 #include <stdexcept>
+#include <cctype>
+
+namespace
+{
+    bool isBlank(const string& value)
+    {
+        for (size_t i = 0; i < value.length(); i++)
+        {
+            if (!isspace(static_cast<unsigned char>(value[i])))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 
 // Constructor mac dinh
 Employee::Employee()
@@ -44,7 +61,7 @@ string Employee::get_id() const
 
 void Employee::set_id(const string& employee_id)
 {
-    if (employee_id.empty())
+    if (isBlank(employee_id))
     {
         throw invalid_argument("Employee ID cannot be empty!");
     }
@@ -59,7 +76,7 @@ string Employee::get_name() const
 
 void Employee::set_name(const string& employee_name)
 {
-    if (employee_name.empty())
+    if (isBlank(employee_name))
     {
         throw invalid_argument("Employee name cannot be empty!");
     }
@@ -74,7 +91,7 @@ string Employee::get_address() const
 
 void Employee::set_address(const string& employee_address)
 {
-    if (employee_address.empty())
+    if (isBlank(employee_address))
     {
         throw invalid_argument("Employee address cannot be empty!");
     }
@@ -129,24 +146,26 @@ bool Employee::isActive() const
 
 void Employee::validate() const
 {
-    if (employee_id.empty())
+    if (isBlank(employee_id))
     {
         throw invalid_argument("Employee ID cannot be empty!");
     }
 
-    if (employee_name.empty())
+    if (isBlank(employee_name))
     {
         throw invalid_argument("Employee name cannot be empty!");
     }
 
-    if (employee_address.empty())
+    if (isBlank(employee_address))
     {
         throw invalid_argument("Employee address cannot be empty!");
     }
 
-    if (position.empty())
+    if (position != "Driver" &&
+        position != "Janitor" &&
+        position != "Manager")
     {
-        throw invalid_argument("Employee position cannot be empty!");
+        throw invalid_argument("Invalid employee position!");
     }
 
     if (employee_status != "Active" &&
