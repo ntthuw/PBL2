@@ -1,0 +1,17 @@
+EmployeeID|FullName|Address|Position|Status
+NV001|Nguyen Van An|Hai Chau, Da Nang|Driver|Active
+NV002|Tran Thi Binh|Thanh Khe, Da Nang|Janitor|Active
+NV003|Le Van Cuong|Lien Chieu, Da Nang|Janitor|Active
+NV004|Pham Thi Dung|Son Tra, Da Nang|Driver|Active
+NV005|Hoang Van Em|Ngu Hanh Son, Da Nang|Janitor|Active
+NV006|Vo Thi Giang|Cam Le, Da Nang|Janitor|Active
+NV007|Dang Van Hung|Hai Chau, Da Nang|Manager|Active
+NV008|Bui Thi Lan|Thanh Khe, Da Nang|Driver|Inactive
+NV009|Nguyen Duc Minh|Hai Chau, Da Nang|Driver|Active
+NV010|Tran Van Nam|Thanh Khe, Da Nang|Janitor|Active
+NV011|Le Thi Oanh|Son Tra, Da Nang|Janitor|Active
+NV012|Pham Quoc Phuc|Lien Chieu, Da Nang|Driver|Inactive
+NV013|Vo Thi Quynh|Cam Le, Da Nang|Janitor|Inactive
+NV014|Hoang Thi Thu|Ngu Hanh Son, Da Nang|Janitor|Active
+NV015|Bui Van Tuan|Hai Chau, Da Nang|Janitor|Active
+NV016|Do Thi Yen|Thanh Khe, Da Nang|Manager|Active
