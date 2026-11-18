@@ -1,41 +1,32 @@
+
 #pragma once
-#include<iostream>
-#include<string.h>
+
 #include "Employee.h"
-using namespace std;
+
 class Manager : public Employee
 {
-
-
-private:
-    long long managerAllowance;
-
-
-
-
 public:
-// constructor
+    // Constructor
     Manager();
-    Manager (
-        string employee_id,
-        string employee_name,
-        string employee_address,
-        long long employee_salary
 
-
+    Manager(
+        const string& employee_id,
+        const string& employee_name,
+        const string& employee_address
     );
-// ham get, set
-    long long get_managerAllowance() const;
-    void set_managerAllowance(long long allowance);
 
+    // Constructor tuong thich voi cach khoi tao cu.
+    // Salary truyen vao phai bang luong co dinh cua Manager.
+    Manager(
+        const string& employee_id,
+        const string& employee_name,
+        const string& employee_address,
+        long long employee_salary
+    );
 
+    // Ham ao
+    Employee* clone() const override;
     long long calculate_salary() const override;
+    void validate() const override;
     void Show() const override;
-
-
-
-
 };
-
-
-
