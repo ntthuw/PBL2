@@ -1,27 +1,32 @@
+
 #pragma once
-#include<iostream>
-#include<string.h>
+
 #include "Employee.h"
-using namespace std;
+
 class Driver : public Employee
 {
-
-
 public:
+    // Constructor
     Driver();
+
     Driver(
-        string employee_id,
-        string employee_name,
-        string employee_address,
-        long long employee_salary
-
-
+        const string& employee_id,
+        const string& employee_name,
+        const string& employee_address
     );
+
+    // Constructor tuong thich voi cach khoi tao cu.
+    // Salary truyen vao phai bang luong co dinh cua Driver.
+    Driver(
+        const string& employee_id,
+        const string& employee_name,
+        const string& employee_address,
+        long long employee_salary
+    );
+
+    // Ham ao
+    Employee* clone() const override;
     long long calculate_salary() const override;
+    void validate() const override;
     void Show() const override;
-
-
 };
-
-
-
