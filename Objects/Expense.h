@@ -1,19 +1,22 @@
+
 #pragma once
-#include <iostream>
+
 #include <string>
+
 using namespace std;
 
 class Expense {
 private:
     string expense_id;
-    string category; // "Nhien lieu", "Bao tri", "Khac"
-    long long amount;
-    string date;
+    string category;         // Chi phi phat sinh, KHONG bao gom luong
+    long long amount;        // Don vi: VND
+    string date;             // Dinh dang: YYYY-MM-DD
     string description;
 
 public:
     Expense();
-    Expense(string expense_id, string category, long long amount, string date, string description);
+    Expense(string expense_id, string category, long long amount,
+            string date, string description);
 
     string getExpense_id() const;
     void setExpense_id(const string& expense_id);
@@ -29,6 +32,9 @@ public:
 
     string getDescription() const;
     void setDescription(const string& description);
+
+    // Kiem tra tinh hop le cua toan bo doi tuong.
+    void validate() const;
 
     void Show() const;
 };

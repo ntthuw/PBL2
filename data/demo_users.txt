@@ -1,0 +1,5 @@
+user_id|username|password|role|linked_id|status
+U001|admin|Admin@1234|Manager|NV007|Active
+U002|driver01|Driver@1234|Employee|NV001|Active
+U003|customer01|Customer@1234|Customer|KH001|Active
+U004|guestoff|Disabled@1234|Customer|KH002|Disabled

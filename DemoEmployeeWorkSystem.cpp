@@ -1,9 +1,9 @@
 #include "EmployeeWorkSystem.h"
-#include "Object/Driver.h"
-#include "Object/Janitor.h"
-#include "Object/Manager.h"
-#include "Object/Vehicle.h"
-#include "Object/Assignment.h"
+#include "Objects/Driver.h"
+#include "Objects/Janitor.h"
+#include "Objects/Manager.h"
+#include "Objects/Vehicle.h"
+#include "Objects/Assignment.h"
 
 #include <iostream>
 #include <fstream>

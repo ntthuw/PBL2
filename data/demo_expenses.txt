@@ -1,0 +1,4 @@
+expense_id|expense_type|expense_date|amount|description
+CP001|Fuel|2026-11-10|500000|Do xang xe thu gom
+CP002|Maintenance|2026-11-12|350000|Bao duong xe
+CP003|Other|2026-10-20|120000|Mua dung cu ve sinh
