@@ -1,15 +1,13 @@
 #include "raylib.h"
-
 #include "EmployeeWorkSystem.h"
 #include "Managers/AuthManager.h"
 #include "Managers/CustomerManager.h"
 #include "Managers/ExpenseManager.h"
 #include "Managers/InvoiceManager.h"
 #include "Policies/FeePolicy.h"
-#include "Objects/Driver.h"
-#include "Objects/Janitor.h"
-#include "Objects/Manager.h"
-
+#include "Object/Driver.h"
+#include "Object/Janitor.h"
+#include "Object/Manager.h"
 #include <algorithm>
 #include <cctype>
 #include <ctime>
@@ -26,6 +24,8 @@ using namespace std;
 namespace {
 
 namespace UITheme {
+
+const float FontScale = 1.10f;
 const int WindowWidth = 1440;
 const int WindowHeight = 900;
 const int SidebarWidth = 250;
@@ -33,15 +33,15 @@ const int SpaceXS = 8;
 const int SpaceSM = 12;
 const int SpaceMD = 18;
 const int SpaceLG = 24;
-const float FontPageTitle = 28;
-const float FontSectionTitle = 20;
-const float FontSidebar = 18;
-const float FontBody = 18;
-const float FontTable = 17;
-const float FontButton = 17;
-const float ButtonHeight = 42;
-const float FontCaption = 16;
-const float FontMetric = 30;
+const float FontPageTitle = 30;
+const float FontSectionTitle = 22;
+const float FontSidebar = 19;
+const float FontBody = 19;
+const float FontTable = 18;
+const float FontButton = 18;
+const float ButtonHeight = 46;
+const float FontCaption = 17;
+const float FontMetric = 32;
 const Color Background = { 248, 250, 249, 255 };
 const Color Surface = { 255, 255, 255, 255 };
 const Color Text = { 23, 43, 36, 255 };
@@ -55,7 +55,9 @@ const Color SidebarActive = { 22, 132, 71, 255 };
 const Color Info = { 44, 105, 210, 255 };
 const Color Warning = { 198, 130, 25, 255 };
 const Color Error = { 220, 53, 69, 255 };
+
 }
+
 using namespace UITheme;
 
 const int WINDOW_WIDTH = UITheme::WindowWidth;
@@ -122,12 +124,14 @@ Font uiFont(float size, FontWeight weight)
 
 void drawText(const string& text, float x, float y, float size, Color color, FontWeight weight = FONT_AUTO)
 {
-    DrawTextEx(uiFont(size, weight), text.c_str(), Vector2{ x, y }, size, 0.0f, color);
+    const float renderedSize = size * UITheme::FontScale;
+    DrawTextEx(uiFont(renderedSize, weight), text.c_str(), Vector2{ x, y }, renderedSize, 0.0f, color);
 }
 
 float textWidth(const string& text, float size, FontWeight weight = FONT_AUTO)
 {
-    return MeasureTextEx(uiFont(size, weight), text.c_str(), size, 0.0f).x;
+    const float renderedSize = size * UITheme::FontScale;
+    return MeasureTextEx(uiFont(renderedSize, weight), text.c_str(), renderedSize, 0.0f).x;
 }
 
 string fitText(const string& text, float width, float size, FontWeight weight = FONT_AUTO)
@@ -364,6 +368,7 @@ struct UiState {
     bool showPassword;
     bool confirmDelete;
     int formErrorField;
+    vector<string> formFieldErrors;
     UiState() : page(PAGE_DASHBOARD), selectedRow(-1), scroll(0), messageTimer(0), loginMode(true), loginStep(0), selectedRole(-1), loginField(0), formKind(0), formField(0), formEdit(false), messageKind(FEEDBACK_INFO), groupOpen(5, true), showPassword(false), confirmDelete(false), formErrorField(-1) {}
 };
 
@@ -619,8 +624,8 @@ void tableBase(UiState& ui, const string& subtitle, const vector<string>& header
         const string fitted = fitText(headers[c], colWidth - 12, UITheme::FontTable, FONT_SEMIBOLD);
         label(fitted, static_cast<int>(left + c * colWidth), static_cast<int>(top), (int)UITheme::FontTable, MUTED, FONT_SEMIBOLD);
     }
-    DrawLine(static_cast<int>(left), static_cast<int>(top + 29), static_cast<int>(left + usableWidth), static_cast<int>(top + 29), LINE);
-    int visible = 9;
+    DrawLine(static_cast<int>(left), static_cast<int>(top + 32), static_cast<int>(left + usableWidth), static_cast<int>(top + 32), LINE);
+    int visible = 8;
     int maxScroll = max(0, total - visible);
     ui.scroll = max(0, min(ui.scroll, maxScroll));
     int shown = 0;
@@ -633,8 +638,8 @@ void tableBase(UiState& ui, const string& subtitle, const vector<string>& header
         if (!query.empty() && lowerText(combined).find(query) == string::npos) continue;
         if (matchingIndex++ < ui.scroll) continue;
         if (shown >= visible) break;
-        float y = top + 42 + shown * 52.0f;
-        Rectangle row = { left - 8, y - 8, usableWidth + 16, 46 };
+        float y = top + 44 + shown * 56.0f;
+        Rectangle row = { left - 8, y - 8, usableWidth + 16, 50 };
         bool selected = ui.selectedRow == i;
         bool hover = CheckCollisionPointRec(logicalMouse(), row);
         if (selected || hover) DrawRectangleRounded(row, 0.12f, 6, selected ? UI_BLUE_LIGHT : BG);
@@ -642,8 +647,8 @@ void tableBase(UiState& ui, const string& subtitle, const vector<string>& header
             string text = fitText(values[c], colWidth - 12, UITheme::FontTable, FONT_REGULAR);
             if (isKnownStatus(values[c])) {
                 const Color tone = statusColor(values[c]);
-                const float badgeW = min(colWidth - 12, textWidth(text, UITheme::FontCaption, FONT_MEDIUM) + 20);
-                DrawRectangleRounded({left + c * colWidth, y, badgeW, 30}, 0.25f, 8, Color{tone.r, tone.g, tone.b, 30});
+                const float badgeW = min(colWidth - 12, textWidth(text, UITheme::FontCaption, FONT_MEDIUM) + 22);
+                DrawRectangleRounded({left + c * colWidth, y, badgeW, 32}, 0.25f, 8, Color{tone.r, tone.g, tone.b, 30});
                 label(text, static_cast<int>(left + c * colWidth + 10), static_cast<int>(y + 6), (int)UITheme::FontCaption, tone, FONT_MEDIUM);
             } else {
                 Color color = c == 0 ? INK : MUTED;
@@ -1010,6 +1015,7 @@ void openForm(UiState& ui, int kind, const string& context = "")
     ui.formKey.clear();
     ui.formField = context.empty() ? 0 : 1;
     ui.formErrorField = -1;
+    ui.formFieldErrors.assign(formLabels(kind).size(), string());
     ui.formValues = vector<string>(formLabels(kind).size());
     if (!context.empty() && !ui.formValues.empty()) ui.formValues[0] = context;
 }
@@ -1059,9 +1065,20 @@ void saveForm(AppData& app, UiState& ui)
         ui.formErrorField = -1;
         const vector<string>& f = ui.formValues;
         const vector<string> fields = formLabels(ui.formKind);
+        ui.formFieldErrors.assign(f.size(), string());
+        string firstFieldError;
         for (size_t i = 0; i < f.size(); ++i) {
-            if (f[i].empty()) { ui.formErrorField = (int)i; throw invalid_argument(fields[i] + " là trường bắt buộc"); }
-            if (f[i].find_first_of("|\r\n") != string::npos) { ui.formErrorField = (int)i; throw invalid_argument(fields[i] + " chứa ký tự không hợp lệ"); }
+            if (f[i].empty()) {
+                ui.formFieldErrors[i] = fields[i] + " là trường bắt buộc";
+            } else if (f[i].find_first_of("|\r\n") != string::npos) {
+                ui.formFieldErrors[i] = fields[i] + " chứa ký tự không hợp lệ";
+            }
+            if (firstFieldError.empty() && !ui.formFieldErrors[i].empty())
+                firstFieldError = ui.formFieldErrors[i];
+        }
+        if (!firstFieldError.empty()) {
+            setMessage(ui, firstFieldError, FEEDBACK_ERROR, 5);
+            return;
         }
         bool assignmentNeedsReconfirmation = false;
         switch (ui.formKind) {
@@ -1170,6 +1187,7 @@ void saveForm(AppData& app, UiState& ui)
         ui.formEdit = false;
         ui.formKey.clear();
         ui.formValues.clear();
+        ui.formFieldErrors.clear();
     } catch (const exception& e) {
         setMessage(ui, e.what(), FEEDBACK_ERROR, 5);
     }
@@ -1182,7 +1200,10 @@ void readForm(UiState& ui, AppData& app)
     while (key > 0) {
         if (ui.formField >= 0 && ui.formField < (int)ui.formValues.size()) {
             appendCodepoint(ui.formValues[ui.formField], key, 256);
-            if (ui.formErrorField == ui.formField) { ui.formErrorField = -1; ui.message.clear(); ui.messageTimer = 0; }
+            if (ui.formField >= 0 && ui.formField < (int)ui.formFieldErrors.size())
+                ui.formFieldErrors[ui.formField].clear();
+            if (ui.formErrorField == ui.formField) ui.formErrorField = -1;
+            ui.message.clear(); ui.messageTimer = 0;
         }
         key = GetCharPressed();
     }
@@ -1191,44 +1212,96 @@ void readForm(UiState& ui, AppData& app)
         size_t at = value.size() - 1;
         while (at > 0 && (static_cast<unsigned char>(value[at]) & 0xC0) == 0x80) --at;
         value.erase(at);
-        if (ui.formErrorField == ui.formField) { ui.formErrorField = -1; ui.message.clear(); ui.messageTimer = 0; }
+        if (ui.formField >= 0 && ui.formField < (int)ui.formFieldErrors.size())
+                ui.formFieldErrors[ui.formField].clear();
+            if (ui.formErrorField == ui.formField) ui.formErrorField = -1;
+            ui.message.clear(); ui.messageTimer = 0;
     }
     if (IsKeyPressed(KEY_TAB) && !ui.formValues.empty()) ui.formField = (ui.formField + 1) % (int)ui.formValues.size();
-    if (IsKeyPressed(KEY_ESCAPE)) { ui.formKind = FORM_NONE; ui.formValues.clear(); }
+    if (IsKeyPressed(KEY_ESCAPE)) { ui.formKind = FORM_NONE; ui.formValues.clear(); ui.formFieldErrors.clear(); }
     if (IsKeyPressed(KEY_ENTER)) saveForm(app, ui);
 }
 
 void drawForm(AppData& app, UiState& ui)
 {
     if (ui.formKind == FORM_NONE) return;
+
     DrawRectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color{15, 25, 42, 125});
-    vector<string> labels = formLabels(ui.formKind);
-    float height = 190 + (float)labels.size() * 76;
-    Rectangle panel = { 410, (WINDOW_HEIGHT - height) / 2, 620, height };
+    const vector<string> fields = formLabels(ui.formKind);
+    if (ui.formFieldErrors.size() != fields.size())
+        ui.formFieldErrors.assign(fields.size(), string());
+
+    const float fieldStart = 68.0f;
+    const float fieldStep = 78.0f;
+    const float errorExtra = 25.0f;
+    float fieldsHeight = 0.0f;
+    for (size_t i = 0; i < fields.size(); ++i)
+        fieldsHeight += fieldStep + (ui.formFieldErrors[i].empty() ? 0.0f : errorExtra);
+
+    const bool hasFieldError = find_if(ui.formFieldErrors.begin(), ui.formFieldErrors.end(),
+        [](const string& value) { return !value.empty(); }) != ui.formFieldErrors.end();
+    const bool hasGeneralMessage = !hasFieldError && ui.formErrorField < 0 &&
+        ui.messageTimer > 0 && !ui.message.empty();
+    const float messageExtra = hasGeneralMessage ? 30.0f : 0.0f;
+    const float panelHeight = min((float)WINDOW_HEIGHT - 32.0f,
+                                  fieldStart + fieldsHeight + 92.0f + messageExtra);
+    Rectangle panel = { 410, (WINDOW_HEIGHT - panelHeight) / 2.0f, 620, panelHeight };
     DrawRectangleRounded(panel, 0.035f, 8, SURFACE);
     DrawRectangleRoundedLines(panel, 0.035f, 8, LINE);
+
     const char* titles[] = {"", "Thêm nhân viên", "Thêm phương tiện", "Thêm khách hàng", "Lập hóa đơn", "Thêm chi phí", "Tạo tài khoản", "Tạo Assignment Planned", "Thêm thành viên", "Gán phương tiện", "Ghi / sửa Check-in", "Ghi / sửa Check-out"};
     const string formTitle = ui.formEdit ? string("Chỉnh sửa: ") + titles[ui.formKind] : titles[ui.formKind];
-    label(formTitle, (int)panel.x + 26, (int)panel.y + 22, (int)UITheme::FontSectionTitle, INK, FONT_SEMIBOLD);
-    for (size_t i = 0; i < labels.size(); ++i) {
-        float y = panel.y + 66 + i * 76;
-        label(labels[i], (int)panel.x + UITheme::SpaceLG, (int)y, (int)UITheme::FontCaption, MUTED, FONT_MEDIUM);
-        Rectangle input = { panel.x + UITheme::SpaceLG, y + 23, panel.width - 2 * UITheme::SpaceLG, 40 };
-        bool active = ui.formField == (int)i;
-        const bool invalid = ui.formErrorField == (int)i;
-        DrawRectangleRounded(input, 0.14f, 6, invalid ? Color{252, 232, 234, 255} : active ? GREEN_PALE : BG);
+    label(formTitle, (int)panel.x + 26, (int)panel.y + 22,
+          (int)UITheme::FontSectionTitle, INK, FONT_SEMIBOLD);
+
+    float y = panel.y + fieldStart;
+    for (size_t i = 0; i < fields.size(); ++i) {
+        label(fields[i], (int)panel.x + UITheme::SpaceLG, (int)y,
+              (int)UITheme::FontCaption, MUTED, FONT_MEDIUM);
+
+        Rectangle input = { panel.x + UITheme::SpaceLG, y + 24,
+                            panel.width - 2 * UITheme::SpaceLG, 42 };
+        const bool active = ui.formField == (int)i;
+        const bool invalid = !ui.formFieldErrors[i].empty() || ui.formErrorField == (int)i;
+        DrawRectangleRounded(input, 0.14f, 6,
+            invalid ? Color{252, 232, 234, 255} : active ? GREEN_PALE : BG);
         DrawRectangleRoundedLines(input, 0.14f, 6, invalid ? UI_RED : active ? UI_GREEN : LINE);
+
         string value = ui.formValues[i];
-        if (ui.formKind == FORM_INVOICE && i == 1 && value.empty()) value = "Nhập mã khách hàng trước";
-        label(fitText(value, input.width - 2 * UITheme::SpaceXS, UITheme::FontBody), (int)input.x + UITheme::SpaceXS, (int)input.y + 9, (int)UITheme::FontBody, value.empty() ? MUTED : INK, FONT_REGULAR);
-        if (invalid && ui.messageTimer > 0 && !ui.message.empty())
-            label(fitText(ui.message, panel.width - 60, UITheme::FontCaption), (int)panel.x + 30, (int)(y + 65), (int)UITheme::FontCaption, UI_RED, FONT_MEDIUM);
-        if (CheckCollisionPointRec(logicalMouse(), input) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) ui.formField = (int)i;
+        if (ui.formKind == FORM_INVOICE && i == 1 && value.empty())
+            value = "Nhập mã khách hàng trước";
+        label(fitText(value, input.width - 2 * UITheme::SpaceXS, UITheme::FontBody),
+              (int)input.x + UITheme::SpaceXS, (int)input.y + 10,
+              (int)UITheme::FontBody, value.empty() ? MUTED : INK, FONT_REGULAR);
+
+        if (!ui.formFieldErrors[i].empty()) {
+            label(fitText(ui.formFieldErrors[i], panel.width - 60, UITheme::FontCaption),
+                  (int)panel.x + 30, (int)(input.y + input.height + 3),
+                  (int)UITheme::FontCaption, UI_RED, FONT_MEDIUM);
+        }
+
+        if (CheckCollisionPointRec(logicalMouse(), input) &&
+            IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            ui.formField = (int)i;
+
+        y += fieldStep + (ui.formFieldErrors[i].empty() ? 0.0f : errorExtra);
     }
-        if (ui.formErrorField < 0 && ui.messageTimer > 0 && !ui.message.empty())
-        label(fitText(ui.message, panel.width - 52, UITheme::FontCaption), (int)panel.x + 26, (int)(panel.y + panel.height - 82), (int)UITheme::FontCaption, feedbackColor(ui.messageKind), FONT_MEDIUM);
-    if (button({panel.x + panel.width - 250, panel.y + panel.height - 54, 104, UITheme::ButtonHeight}, "Hủy")) { setMessage(ui, "Đã hủy thao tác", FEEDBACK_INFO); ui.formKind = FORM_NONE; ui.formValues.clear(); }
-    if (button({panel.x + panel.width - 132, panel.y + panel.height - 54, 106, UITheme::ButtonHeight}, "Lưu", true)) saveForm(app, ui);
+
+    const float buttonY = panel.y + panel.height - 58.0f;
+    if (hasGeneralMessage) {
+        label(fitText(ui.message, panel.width - 52, UITheme::FontCaption),
+              (int)panel.x + 26, (int)(buttonY - 29),
+              (int)UITheme::FontCaption, feedbackColor(ui.messageKind), FONT_MEDIUM);
+    }
+
+    if (button({panel.x + panel.width - 250, buttonY, 104, UITheme::ButtonHeight}, "Hủy")) {
+        setMessage(ui, "Đã hủy thao tác", FEEDBACK_INFO);
+        ui.formKind = FORM_NONE;
+        ui.formValues.clear();
+        ui.formFieldErrors.clear();
+    }
+    if (button({panel.x + panel.width - 132, buttonY, 106, UITheme::ButtonHeight}, "Lưu", true))
+        saveForm(app, ui);
 }
 
 void deleteSelected(AppData& app, UiState& ui)
@@ -1530,7 +1603,6 @@ int main()
                 EndMode2D(); EndDrawing();
                 continue;
             }
-
             BeginDrawing();
             ClearBackground(BG);
             BeginMode2D(UI_CAMERA);
@@ -1576,5 +1648,6 @@ int main()
         CloseWindow();
         return 1;
     }
+    
     return 0;
 }
